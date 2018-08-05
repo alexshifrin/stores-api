@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask
 from flask_restful import Api
 from flask_jwt import JWT
@@ -10,7 +12,8 @@ from resources.store import Store, StoreList
 
 app = Flask(__name__)
 # the db URI could point to a sqlite, postgre, oracle or whatever db you want
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
+# if DATABASE_URL isn't found on Heroku version then default SQLite url is used for local testing
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///data.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'topchekeret'
 api = Api(app)
